@@ -9,18 +9,17 @@ class Translator {
   translateToBritish(str) {
     // For Time
     str = str.replace(/(\d+)\:(\d+)/, `<span class="highlight">$1.$2</span>`);
-
+    
     // For Basic Words
     for (let key in americanToBritishSpelling) {
       if (americanToBritishSpelling.hasOwnProperty(key)) {
-        const regex = new RegExp(key, 'g');
+        const regex = new RegExp(`\\b${key}\\b`, 'gi');
         str = str.replace(regex, `<span class="highlight">${americanToBritishSpelling[key]}</span>`);
       };
     };
 
     // For Titles
     for (let key in americanToBritishTitles) {
-      console.log(key)
       if (americanToBritishTitles.hasOwnProperty(key)) {
         const regex = new RegExp(key, 'gi');
         str = str.replace(regex, (match) => {
@@ -36,13 +35,12 @@ class Translator {
 
     // For American Only Words
     for (let key in americanOnly) {
-      if (britishOnly.hasOwnProperty(key)) {
-        const regex = new RegExp(key, 'g');
-        str = str.replace(regex, `<span class="highlight">${americanhOnly[key]}</span>`);
+      if (americanOnly.hasOwnProperty(key)) {
+        const regex = new RegExp(`\\b${key}\\b`, 'gi');
+        str = str.replace(regex, `<span class="highlight">${americanOnly[key]}</span>`);
       };
     };
 
-    console.log(str);
     return str;
   }
 
@@ -54,7 +52,7 @@ class Translator {
     for (const [key, value] of Object.entries(americanToBritishSpelling)) {
       const index = british.indexOf(value);
       if (index > -1) {
-        const regex = new RegExp(value, 'g');
+        const regex = new RegExp(`\\b${value}\\b`, 'gi');
         str = str.replace(regex, `<span class="highlight">${american[index]}</span>`);
       };
     };
@@ -63,7 +61,7 @@ class Translator {
     for (const [key, value] of Object.entries(americanToBritishTitles)) {
       const index = Object.values(americanToBritishTitles).indexOf(value);
       if (index > -1) {
-        const regex = new RegExp(value, 'gi');
+        const regex = new RegExp(`\\b${value}\\b`, 'gi');
         str = str.replace(regex, (match) => {
           const replacement = Object.keys(americanToBritishTitles)[index];
           if (match.charAt(0) === match.charAt(0).toUpperCase()) {
@@ -78,12 +76,11 @@ class Translator {
     // For British Only Words
     for (let key in britishOnly) {
       if (britishOnly.hasOwnProperty(key)) {
-        const regex = new RegExp(key, 'g');
+        const regex = new RegExp(`\\b${key}\\b`, 'gi');
         str = str.replace(regex, `<span class="highlight">${britishOnly[key]}</span>`);
       };
     };
 
-    console.log(str);
     return str;
   }
 }
